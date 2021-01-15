@@ -1,0 +1,9 @@
+
+##### data processing
+
+1) check the positive and negative percentage in the beginning
+
+# finding percentage of 0 and 1 target
+real_tweets = len(train_df[train_df["target"] == 1])
+real_tweets_percentage = real_tweets/train_df.shape[0]*100
+fake_tweets_percentage = 100-real_tweets_percentage
