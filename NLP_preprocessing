@@ -1,5 +1,7 @@
 ##########clearning up some characters
 
+# Clear keras session 
+tf.keras.backend.clear_session()
 
 def clean_text(text):
     '''Make text lowercase, remove text in square brackets,remove links,remove punctuation
