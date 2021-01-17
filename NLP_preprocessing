@@ -1,0 +1,52 @@
+##########clearning up some characters
+
+
+def clean_text(text):
+    '''Make text lowercase, remove text in square brackets,remove links,remove punctuation
+    and remove words containing numbers.'''
+    text = text.lower()
+    text = re.sub('[.*?]', '', text)  ##any of the sign in the bracket [.#?]
+    text = re.sub('https?://\S+|www\.\S+', '', text)  #http://.. or https://.. or www.
+    text = re.sub('<.*?>+', '', text)     #only
+    text = re.sub('[%s]' % re.escape(string.punctuation), '', text)
+    text = re.sub('\n', '', text)
+    text = re.sub('\w*\d\w*', '', text)
+    return text
+
+# Applying the cleaning function to both test and train datasets
+train_df['text'] = train_df['text'].apply(lambda x: clean_text(x))
+test_df['text'] = test_df['text'].apply(lambda x: clean_text(x))
+
+#########remove stopwords ##
+# stopwords
+stopwords.words('english')
+len(stopwords.words('english'))  #=179
+# removing stopwords
+def remove_stopwords(text):
+    words = [w for w in text if w not in stopwords.words('english')]
+    return words 
+train_df['text'] = train_df['text'].apply(lambda x : remove_stopwords(x))
+test_df['text'] = test_df['text'].apply(lambda x : remove_stopwords(x))
+test_df.head()
+
+##############
+Examples of lemmatization:
+1.playing ,plays and played all these 3 letters will be converted to play after lemmatization
+# lemmatization
+lem = WordNetLemmatizer()
+def lem_word(x):
+    return [lem.lemmatize(w) for w in x]
+train_df['text'] = train_df['text'].apply(lem_word)
+test_df['text'] = test_df['text'].apply(lem_word)
+
+########## how to combine list of words into a str , maybe a better method below:
+
+def combine_text(list_of_text):
+    '''Takes a list of text and combines them into one large chunk of text.'''
+    combined_text = ' '.join(list_of_text)
+    return combined_text
+
+train_df['text'] = train_df['text'].apply(lambda x : combine_text(x))
+test_df['text'] = test_df['text'].apply(lambda x : combine_text(x))
+train_df['text']
+train_df.head()
